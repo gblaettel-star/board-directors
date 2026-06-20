@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Boardroom">
+<meta name="theme-color" content="#0d1512">
+<link rel="manifest" href="manifest.json">
+<title>Boardroom Ready — Director & Finance Skills</title>
+<style>
+  :root{
+    --bg:#0d1512;
+    --panel:#16211c;
+    --panel-2:#1f2d26;
+    --ink:#e9f1ec;
+    --muted:#9db3a8;
+    --accent:#2bb673;
+    --accent-soft:#103a2a;
+    --gold:#e3b341;
+    --good:#3fb950;
+    --good-bg:#0f3a1f;
+    --bad:#f85149;
+    --bad-bg:#3a1414;
+    --line:#28392f;
+    --radius:16px;
+    --shadow:0 8px 30px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+  header.app{text-align:center;padding:24px 12px 14px}
+  header.app .badge{
+    display:inline-block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);border:1px solid var(--line);border-radius:999px;padding:5px 14px;margin-bottom:14px;
+  }
+  header.app h1{font-size:1.9rem;margin:.1em 0 .15em;letter-spacing:-.5px}
+  header.app p{color:var(--muted);margin:.2em auto;max-width:34em;font-size:.98rem}
+
+  .tag-finance{display:inline-block;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--accent);border-radius:5px;padding:1px 6px;margin-left:8px;vertical-align:middle}
+
+  .progress-bar{height:8px;background:var(--panel);border-radius:999px;overflow:hidden;margin:18px 0 6px}
+  .progress-bar > div{height:100%;background:linear-gradient(90deg,var(--accent),#5fe0a8);width:0;transition:width .5s ease}
+  .progress-label{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:8px}
+
+  .section-head{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    margin:26px 4px 2px;border-top:1px solid var(--line);padding-top:18px}
+
+  .modules{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;cursor:pointer;transition:transform .12s ease,border-color .2s ease;
+    display:flex;align-items:center;gap:16px;
+  }
+  .card:active{transform:scale(.99)}
+  .card:hover{border-color:var(--accent)}
+  .card .num{
+    flex:0 0 46px;height:46px;border-radius:12px;background:var(--accent-soft);color:#7ff0bf;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.15rem;
+  }
+  .card.done .num{background:var(--good-bg);color:var(--good)}
+  .card .meta{flex:1;min-width:0}
+  .card .meta h3{margin:0 0 3px;font-size:1.08rem}
+  .card .meta p{margin:0;color:var(--muted);font-size:.86rem}
+  .card .chev{color:var(--muted);font-size:1.4rem}
+  .card .score-pill{font-size:.74rem;color:var(--good);border:1px solid var(--good);border-radius:999px;padding:2px 9px;margin-top:6px;display:inline-block}
+
+  .view{display:none;animation:fade .3s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .back{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    border-radius:10px;padding:9px 14px;font-size:.9rem;cursor:pointer}
+  .back:active{background:var(--panel-2)}
+  .topbar .crumb{color:var(--muted);font-size:.82rem;letter-spacing:.04em}
+
+  .lesson h2{font-size:1.55rem;margin:.2em 0 .5em;letter-spacing:-.4px}
+  .lesson h4{color:var(--gold);font-size:1.05rem;margin:1.4em 0 .3em}
+  .lesson p{margin:.6em 0;color:#d6e2db}
+  .lesson ul{margin:.5em 0 .9em;padding-left:1.25em}
+  .lesson li{margin:.35em 0;color:#d6e2db}
+  .lesson .key{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:1.1em 0}
+  .lesson .key strong{color:#9ff0c8}
+  .lesson .term{color:#fff;font-weight:600}
+  .lesson em{color:var(--gold);font-style:normal}
+  .lesson table{width:100%;border-collapse:collapse;margin:1em 0;font-size:.9rem}
+  .lesson th,.lesson td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  .lesson th{background:var(--panel-2);color:#bfe9d4}
+  .lesson .formula{background:#0a0f0d;border:1px solid var(--line);border-radius:10px;padding:10px 14px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;color:#bfe9d4;margin:.8em 0;overflow-x:auto}
+
+  .startquiz{display:block;width:100%;margin:26px 0 8px;padding:16px;border:none;border-radius:14px;
+    background:linear-gradient(90deg,var(--accent),#43d695);color:#04211400;color:#042114;font-weight:800;
+    font-size:1.05rem;cursor:pointer;box-shadow:var(--shadow)}
+  .startquiz:active{transform:scale(.99)}
+
+  .qcount{color:var(--muted);font-size:.85rem;margin-bottom:6px}
+  .qprog{height:6px;background:var(--panel);border-radius:999px;overflow:hidden;margin-bottom:18px}
+  .qprog>div{height:100%;background:var(--gold);width:0;transition:width .3s}
+  .question{font-size:1.2rem;font-weight:600;margin-bottom:18px}
+  .options{display:flex;flex-direction:column;gap:11px}
+  .opt{text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    border-radius:12px;padding:14px 16px;font-size:1rem;cursor:pointer;transition:.15s;
+    display:flex;gap:12px;align-items:flex-start}
+  .opt:hover:not(:disabled){border-color:var(--accent)}
+  .opt:disabled{cursor:default}
+  .opt .letter{flex:0 0 24px;height:24px;border-radius:6px;background:var(--panel-2);color:var(--muted);
+    display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700}
+  .opt.correct{background:var(--good-bg);border-color:var(--good)}
+  .opt.correct .letter{background:var(--good);color:#04210f}
+  .opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+  .opt.wrong .letter{background:var(--bad);color:#2a0606}
+
+  .explain{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;display:none}
+  .explain.show{display:block}
+  .explain .verdict{font-weight:700;margin-bottom:5px}
+  .explain .verdict.ok{color:var(--good)}
+  .explain .verdict.no{color:var(--bad)}
+  .explain p{margin:.2em 0;color:#d6e2db;font-size:.95rem}
+  .next{margin-top:16px;width:100%;padding:14px;border:none;border-radius:12px;background:var(--accent);
+    color:#042114;font-size:1rem;font-weight:800;cursor:pointer;display:none}
+  .next.show{display:block}
+  .next:active{transform:scale(.99)}
+
+  .results{text-align:center;padding:20px 0}
+  .results .ring{width:140px;height:140px;border-radius:50%;margin:10px auto 18px;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:conic-gradient(var(--accent) var(--pct,0%), var(--panel) 0)}
+  .results .ring .inner{width:112px;height:112px;border-radius:50%;background:var(--bg);
+    display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .results .ring .pct{font-size:2rem;font-weight:800}
+  .results .ring .sub{font-size:.72rem;color:var(--muted)}
+  .results h2{margin:.2em 0}
+  .results .msg{color:var(--muted);max-width:30em;margin:.4em auto 1.4em}
+  .results .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .results .actions button{padding:13px 22px;border-radius:12px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink);font-size:.95rem;font-weight:600;cursor:pointer}
+  .results .actions button.primary{background:var(--accent);border-color:var(--accent);color:#042114}
+
+  footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:40px;line-height:1.5}
+  .reset{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.78rem;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HOME -->
+  <div id="home" class="view active">
+    <header class="app">
+      <span class="badge">Board of Directors</span>
+      <h1>Boardroom Ready</h1>
+      <p>What you need to understand to serve as a director — with a deep dive on the finance every board member must master.</p>
+    </header>
+
+    <div class="progress-bar"><div id="overallBar"></div></div>
+    <div class="progress-label" id="overallLabel">0 of 12 lessons completed</div>
+
+    <div id="moduleList"></div>
+
+    <footer>
+      Educational overview of board service and corporate finance (primarily U.S. practice).
+      Not legal, financial, or investment advice.
+      <br><button class="reset" id="resetBtn">Reset all progress</button>
+    </footer>
+  </div>
+
+  <!-- LESSON -->
+  <div id="lesson" class="view">
+    <div class="topbar">
+      <button class="back" data-go="home">‹ All lessons</button>
+      <span class="crumb" id="lessonCrumb"></span>
+    </div>
+    <div class="lesson" id="lessonBody"></div>
+    <button class="startquiz" id="startQuizBtn">Take the quiz ›</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="view">
+    <div class="topbar">
+      <button class="back" data-go="lesson">‹ Back to lesson</button>
+      <span class="crumb" id="quizCrumb"></span>
+    </div>
+    <div class="qcount" id="qCount"></div>
+    <div class="qprog"><div id="qProg"></div></div>
+    <div class="question" id="qText"></div>
+    <div class="options" id="qOptions"></div>
+    <div class="explain" id="qExplain"></div>
+    <button class="next" id="nextBtn">Next ›</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="view">
+    <div class="results">
+      <div class="ring" id="resultRing"><div class="inner"><span class="pct" id="resultPct">0%</span><span class="sub" id="resultFrac"></span></div></div>
+      <h2 id="resultTitle"></h2>
+      <p class="msg" id="resultMsg"></p>
+      <div class="actions">
+        <button id="retryBtn">Retry quiz</button>
+        <button id="reviewBtn">Review lesson</button>
+        <button class="primary" id="homeBtn">Next lesson ›</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   CONTENT  —  section: "gov" (governance) or "fin" (finance)
+   ============================================================ */
+const MODULES = [
+  /* ---------- GOVERNANCE FOUNDATIONS ---------- */
+  {
+    id:"role", section:"gov",
+    title:"What a Board Actually Does",
+    blurb:"Oversight vs. management — the director's real job",
+    lesson:`
+      <h2>What a Board Actually Does</h2>
+      <p>Many people imagine directors "running the company." They don't. The board <span class="term">governs</span>; management <span class="term">operates</span>. Understanding that line is the single most important thing before you join a board.</p>
+
+      <div class="key"><strong>The golden rule:</strong> <em>"Noses in, fingers out."</em> Directors ask probing questions and oversee — they do not manage day-to-day operations.</div>
+
+      <h4>The board's core responsibilities</h4>
+      <ul>
+        <li><span class="term">Hire, evaluate, compensate, and (if needed) fire the CEO</span> — arguably the board's most important job.</li>
+        <li><span class="term">Approve strategy and major decisions</span> — big investments, M&A, budgets, financings.</li>
+        <li><span class="term">Oversee risk and the integrity of financial reporting.</span></li>
+        <li><span class="term">Ensure legal and ethical compliance</span> — set the "tone at the top."</li>
+        <li><span class="term">Represent shareholders</span> and steward the company's long-term health. (For nonprofits, stewardship of the mission.)</li>
+      </ul>
+
+      <h4>What the board does NOT do</h4>
+      <ul>
+        <li>Run daily operations or make routine management decisions.</li>
+        <li>Bypass the CEO to give orders to employees.</li>
+        <li>Micromanage — that destroys the management team's accountability.</li>
+      </ul>
+
+      <h4>How a board works</h4>
+      <p>Directors act <em>collectively</em> — a single director generally has no individual authority to bind the company. Decisions are made by the board as a body, at meetings, by majority vote, with a <span class="term">quorum</span> present. Most real work happens in <span class="term">committees</span> (covered later) and in the questions directors ask between meetings.</p>
+
+      <div class="key"><strong>Why this matters for you:</strong> A great director adds value through judgment, experience, networks, and the right questions — not by doing management's job. Your influence is through the boardroom, not the org chart.</div>
+    `,
+    quiz:[
+      {q:"The fundamental distinction in board service is that the board ___ while management ___.",
+       opts:["operates / governs","governs / operates","audits / invests","funds / spends"],
+       a:1,e:"The board governs (oversight, strategy, CEO selection); management operates the business day to day."},
+      {q:"Which is most often described as the board's single most important job?",
+       opts:["Approving the office lease","Hiring, evaluating, and if necessary firing the CEO","Setting employee schedules","Choosing the company logo"],
+       a:1,e:"Selecting, overseeing, and replacing the CEO is widely regarded as the board's most consequential responsibility."},
+      {q:"'Noses in, fingers out' means directors should:",
+       opts:["Manage daily operations directly","Probe and oversee, but not run operations","Stay out of all company matters","Only attend the annual meeting"],
+       a:1,e:"Directors stay informed and ask hard questions (noses in) but don't take over management (fingers out)."},
+      {q:"An individual director acting alone generally:",
+       opts:["Can bind the company to contracts","Has no individual authority to bind the company","Can fire any employee","Outranks the full board"],
+       a:1,e:"Directors act collectively as a board; one director ordinarily cannot unilaterally bind the corporation."},
+      {q:"A board sets the 'tone at the top,' which refers primarily to:",
+       opts:["The acoustics in the boardroom","The ethical and compliance culture of the company","The CEO's salary","The stock price target"],
+       a:1,e:"'Tone at the top' is the ethical climate and standard of integrity the board and senior leaders model for the organization."}
+    ]
+  },
+  {
+    id:"duties", section:"gov",
+    title:"A Director's Fiduciary Duties",
+    blurb:"Care, loyalty, good faith — and the protections you get",
+    lesson:`
+      <h2>A Director's Fiduciary Duties</h2>
+      <p>As a director you become a <span class="term">fiduciary</span> — held to the highest standard of trust because you steward other people's money. Three duties define the job.</p>
+
+      <h4>1. Duty of Care</h4>
+      <p>Make decisions on an <em>informed</em> basis. Prepare, attend, read the board materials, ask questions, and deliberate. Carelessness — rubber-stamping without understanding — is a breach.</p>
+
+      <div class="key"><strong>Your shield — the Business Judgment Rule:</strong> Courts will <em>not</em> second-guess an honest, informed, conflict-free decision, even if it turns out badly. This is what lets directors take reasonable risks without fear of personal liability.</div>
+
+      <div class="key"><strong>Your other shield — reliance on experts:</strong> Directors may rely in good faith on information, reports, and opinions from officers, auditors, and outside advisors. You don't have to personally re-audit the financials — but you must engage, not blindly defer.</div>
+
+      <h4>2. Duty of Loyalty</h4>
+      <p>Put the company's interests ahead of your own. The classic breaches:</p>
+      <ul>
+        <li><span class="term">Self-dealing</span> — transacting with the company on unfair terms where you have a personal stake.</li>
+        <li><span class="term">Corporate opportunity</span> — taking for yourself a business opportunity that belonged to the company.</li>
+        <li><span class="term">Conflicts of interest</span> — must be disclosed and handled (recuse yourself; let disinterested directors decide).</li>
+      </ul>
+
+      <h4>3. Duty of Good Faith / Oversight</h4>
+      <p>Act honestly and don't consciously ignore your responsibilities. This includes the <span class="term">Caremark duty</span>: directors must make a good-faith effort to put reporting and compliance systems in place and actually monitor them. Conscious failure to oversee is a breach.</p>
+
+      <div class="key"><strong>Practical takeaway:</strong> Show up prepared, disclose conflicts, demand good information, and document that the board deliberated. That's how you both serve well and protect yourself.</div>
+    `,
+    quiz:[
+      {q:"The business judgment rule protects a director who makes a decision that is:",
+       opts:["Self-interested but profitable","Informed, in good faith, and free of conflicts — even if it turns out badly","Always correct in hindsight","Approved by management alone"],
+       a:1,e:"The rule shields honest, informed, conflict-free decisions; courts won't second-guess them merely because the outcome was poor."},
+      {q:"May a director rely on the company's auditors and officers for financial information?",
+       opts:["No — directors must personally audit everything","Yes — they may rely in good faith on experts and officers","Only if they are accountants","Only at the annual meeting"],
+       a:1,e:"Directors may rely in good faith on competent officers and outside experts, while still engaging critically rather than blindly deferring."},
+      {q:"A director steers a lucrative contract to a company she secretly owns. This breaches the duty of:",
+       opts:["Care","Loyalty","Disclosure to the SEC","Good faith only"],
+       a:1,e:"Profiting personally at the company's expense (self-dealing / taking a corporate opportunity) is a breach of the duty of loyalty."},
+      {q:"The 'Caremark' oversight duty requires directors to:",
+       opts:["Personally manage compliance staff","Make a good-faith effort to implement and monitor reporting/compliance systems","Guarantee no laws are ever broken","Approve every expense"],
+       a:1,e:"Caremark requires a good-faith effort to establish monitoring systems and not consciously ignore red flags."},
+      {q:"The best way for a director to handle a personal conflict of interest is to:",
+       opts:["Vote anyway and stay quiet","Disclose it and recuse from the decision","Resign immediately","Ask management to hide it"],
+       a:1,e:"Disclose the conflict and step aside so disinterested directors can decide — this preserves the duty of loyalty."}
+    ]
+  },
+  {
+    id:"structure", section:"gov",
+    title:"Board Structure & Committees",
+    blurb:"Independence, the chair/CEO split, and the key committees",
+    lesson:`
+      <h2>Board Structure & Committees</h2>
+      <p>How a board is organized determines how effectively it can oversee management.</p>
+
+      <h4>Inside vs. independent directors</h4>
+      <ul>
+        <li><span class="term">Inside directors</span> — also company employees/executives (e.g., the CEO).</li>
+        <li><span class="term">Independent (outside) directors</span> — no material relationship with the company, so they can objectively challenge management. Stock-exchange rules require a <em>majority</em> of independent directors for listed companies.</li>
+      </ul>
+
+      <h4>Chair vs. CEO</h4>
+      <p>When one person is both <span class="term">Chair and CEO</span>, the person leading the board also leads management — a potential check-and-balance problem. Many boards appoint an independent Chair or a <span class="term">Lead Independent Director</span> to preserve objective oversight.</p>
+
+      <h4>The three key committees</h4>
+      <table>
+        <tr><th>Committee</th><th>Owns</th></tr>
+        <tr><td>Audit</td><td>Financial reporting integrity, external auditor, internal controls</td></tr>
+        <tr><td>Compensation</td><td>Executive pay and incentive design</td></tr>
+        <tr><td>Nominating / Governance</td><td>Board composition, director recruiting, governance practices</td></tr>
+      </table>
+      <p>For listed companies these three committees must generally be composed <em>entirely of independent directors</em>.</p>
+
+      <h4>Executive sessions</h4>
+      <p>Independent directors meet regularly in <span class="term">executive session</span> — without management present — so they can speak candidly.</p>
+
+      <div class="key"><strong>Where you'll likely serve:</strong> New directors with finance backgrounds are frequently placed on the <em>audit committee</em> — which is exactly why the finance deep dive ahead matters so much.</div>
+    `,
+    quiz:[
+      {q:"An 'independent' director is one who:",
+       opts:["Owns no stock","Has no material relationship with the company beyond the board seat","Is the founder","Lives in another country"],
+       a:1,e:"Independence means no material relationship that would compromise objectivity — enabling genuine oversight of management."},
+      {q:"Appointing a 'Lead Independent Director' is most often a response to:",
+       opts:["A shortage of directors","The same person serving as both Chair and CEO","Low stock prices","Too many committees"],
+       a:1,e:"When the CEO is also Chair, a Lead Independent Director restores independent leadership and balance on the board."},
+      {q:"Which committee oversees the external auditor and financial reporting?",
+       opts:["Compensation committee","Nominating committee","Audit committee","Executive committee"],
+       a:2,e:"The audit committee is responsible for financial reporting integrity, internal controls, and the outside auditor relationship."},
+      {q:"For listed companies, the audit, compensation, and nominating committees must generally be made up of:",
+       opts:["The CEO and CFO","Entirely independent directors","Shareholders","Outside auditors"],
+       a:1,e:"Exchange rules require these key committees to consist entirely of independent directors."},
+      {q:"An 'executive session' is a meeting of:",
+       opts:["The senior executives only","Independent directors without management present","All shareholders","The audit firm and the CFO"],
+       a:1,e:"Executive sessions let independent directors discuss matters candidly without management in the room."}
+    ]
+  },
+  {
+    id:"liability", section:"gov",
+    title:"Director Liability & Your Protections",
+    blurb:"D&O insurance, indemnification, and exculpation",
+    lesson:`
+      <h2>Director Liability & Your Protections</h2>
+      <p>Before accepting any board seat, understand your personal risk — and the three layers that protect you. Ask about all three <em>before</em> you join.</p>
+
+      <h4>The risk</h4>
+      <p>Directors can be named in lawsuits — shareholder derivative suits, securities class actions, regulatory actions. While personal liability is rare for honest, careful directors, the cost of defending a claim is real. Protection matters.</p>
+
+      <h4>The three layers of protection</h4>
+      <ul>
+        <li><span class="term">1. Exculpation</span> — Many charters include a clause (under Delaware law, DGCL §102(b)(7)) that eliminates directors' personal liability for <em>duty-of-care</em> breaches. Note: it does <em>not</em> protect breaches of loyalty, bad faith, or intentional misconduct.</li>
+        <li><span class="term">2. Indemnification</span> — The company agrees to reimburse directors for legal expenses and liabilities incurred in their role (when they acted in good faith). Often backed by the bylaws and a separate indemnification agreement.</li>
+        <li><span class="term">3. D&O Insurance</span> — <span class="term">Directors & Officers liability insurance</span> pays defense costs and settlements. The critical piece is <span class="term">"Side A"</span> coverage, which protects directors directly when the company cannot indemnify them (e.g., insolvency or legal bars).</li>
+      </ul>
+
+      <div class="key"><strong>Due-diligence checklist before joining:</strong> Is there an exculpation clause? A written indemnification agreement? Adequate D&O coverage with strong Side A? What are the policy limits and exclusions? A company that can't answer these is a red flag.</div>
+
+      <h4>What protection does NOT cover</h4>
+      <p>Fraud, knowing violations of law, personal dishonesty, and illegal personal profit are generally <em>not</em> protected by any of these layers. Integrity is the only complete defense.</p>
+    `,
+    quiz:[
+      {q:"An exculpation clause (e.g., Delaware §102(b)(7)) can eliminate director liability for breaches of the duty of:",
+       opts:["Loyalty","Care","Good faith","All duties"],
+       a:1,e:"Exculpation covers duty-of-CARE breaches only. Loyalty breaches, bad faith, and intentional misconduct are not protected."},
+      {q:"'Indemnification' means that:",
+       opts:["Directors insure each other personally","The company reimburses directors for covered legal costs and liabilities","The SEC pays director defense costs","Directors waive all rights"],
+       a:1,e:"Indemnification is the company's agreement to cover a director's expenses and liabilities incurred in good faith in the role."},
+      {q:"Why is 'Side A' D&O coverage especially important to a director?",
+       opts:["It lowers the premium","It protects directors directly when the company can't indemnify them","It only covers the CEO","It replaces indemnification entirely"],
+       a:1,e:"Side A protects directors personally when indemnification is unavailable — e.g., company insolvency — making it crucial."},
+      {q:"Which of these is generally NOT protected by insurance, indemnification, or exculpation?",
+       opts:["An honest but mistaken business decision","Fraud and knowing violations of law","Relying in good faith on auditors","Attending fewer meetings than hoped"],
+       a:1,e:"Fraud, bad faith, and intentional misconduct fall outside all the protections — integrity is the only complete defense."},
+      {q:"Before joining a board, a prudent director should confirm:",
+       opts:["Only the meeting schedule","The exculpation clause, indemnification agreement, and D&O coverage","Just the director fees","The company's logo design"],
+       a:1,e:"Confirming all three protection layers (and their limits/exclusions) is essential due diligence before accepting a seat."}
+    ]
+  },
+
+  /* ---------- FINANCE DEEP DIVE ---------- */
+  {
+    id:"statements", section:"fin",
+    title:"Reading the Three Financial Statements",
+    blurb:"Income statement, balance sheet, and cash flow",
+    lesson:`
+      <h2>Reading the Three Financial Statements</h2>
+      <p>You cannot oversee a company you can't read financially. Three statements tell the whole story — and they connect.</p>
+
+      <h4>1. Income Statement (P&L) — performance over a period</h4>
+      <p>Shows whether the company made a profit. The flow:</p>
+      <div class="formula">Revenue − COGS = Gross Profit
+Gross Profit − Operating Expenses = Operating Income (EBIT)
+Operating Income − Interest − Taxes = Net Income</div>
+      <ul>
+        <li><span class="term">Revenue (top line)</span> — total sales.</li>
+        <li><span class="term">Net income (bottom line)</span> — profit after everything.</li>
+        <li><span class="term">EBITDA</span> — earnings before interest, taxes, depreciation & amortization; a rough proxy for operating cash generation.</li>
+        <li><span class="term">EPS</span> — net income per share.</li>
+      </ul>
+
+      <h4>2. Balance Sheet — a snapshot at one moment</h4>
+      <p>Governed by the fundamental equation:</p>
+      <div class="formula">Assets = Liabilities + Shareholders' Equity</div>
+      <ul>
+        <li><span class="term">Assets</span> — what the company owns (cash, receivables, inventory, property).</li>
+        <li><span class="term">Liabilities</span> — what it owes (payables, debt).</li>
+        <li><span class="term">Equity</span> — the owners' residual stake (assets minus liabilities).</li>
+      </ul>
+
+      <h4>3. Cash Flow Statement — where the cash actually went</h4>
+      <p>Reconciles profit to cash, in three buckets:</p>
+      <ul>
+        <li><span class="term">Operating</span> — cash from the core business (the most important).</li>
+        <li><span class="term">Investing</span> — buying/selling assets, capex, acquisitions.</li>
+        <li><span class="term">Financing</span> — debt, equity, dividends, buybacks.</li>
+      </ul>
+
+      <div class="key"><strong>The director's mantra:</strong> <em>"Profit is an opinion; cash is a fact."</em> A company can report net income yet run out of cash. Always look at cash flow, not just the bottom line.</div>
+
+      <div class="key"><strong>How they connect:</strong> Net income flows from the P&L into equity on the balance sheet and is the starting point of the cash flow statement. The cash line on the balance sheet equals last period's cash plus this period's net change in cash.</div>
+    `,
+    quiz:[
+      {q:"The fundamental balance sheet equation is:",
+       opts:["Revenue − Expenses = Profit","Assets = Liabilities + Shareholders' Equity","Cash = Debt − Equity","Assets = Revenue + Liabilities"],
+       a:1,e:"Assets = Liabilities + Equity always holds; equity is the residual owners' claim after liabilities."},
+      {q:"Which statement best answers 'did the company actually generate cash?'",
+       opts:["Income statement","Balance sheet","Cash flow statement","Proxy statement"],
+       a:2,e:"The cash flow statement reconciles profit to cash and shows operating, investing, and financing cash movements."},
+      {q:"'EBITDA' stands for earnings before:",
+       opts:["Equity, bonds, interest, taxes, assets","Interest, taxes, depreciation, and amortization","Income, billing, taxes, dividends","Expenses before tax deductions, allowances"],
+       a:1,e:"EBITDA = earnings before interest, taxes, depreciation & amortization — a rough proxy for operating cash generation."},
+      {q:"On the income statement, 'gross profit' equals:",
+       opts:["Revenue − Cost of Goods Sold","Net income + taxes","Assets − liabilities","Operating income − interest"],
+       a:0,e:"Gross profit = Revenue − COGS, the profit before operating expenses, interest, and taxes."},
+      {q:"The saying 'profit is an opinion; cash is a fact' warns directors that:",
+       opts:["Profit doesn't matter at all","A profitable company can still run out of cash","Cash flow is always negative","Auditors invent profits"],
+       a:1,e:"Accounting profit involves judgment; a company can show net income yet face a cash crunch — so watch cash, not just earnings."}
+    ]
+  },
+  {
+    id:"ratios", section:"fin",
+    title:"Financial Ratios Every Director Knows",
+    blurb:"Liquidity, leverage, profitability, and valuation",
+    lesson:`
+      <h2>Financial Ratios Every Director Knows</h2>
+      <p>Ratios turn raw numbers into judgment. You don't need to compute them — but you must know what they mean and what a bad one signals.</p>
+
+      <h4>Liquidity — can it pay near-term bills?</h4>
+      <div class="formula">Current Ratio = Current Assets / Current Liabilities
+Quick Ratio = (Current Assets − Inventory) / Current Liabilities</div>
+      <p>A current ratio below ~1.0 can signal trouble meeting short-term obligations.</p>
+
+      <h4>Leverage — how much debt?</h4>
+      <div class="formula">Debt-to-Equity = Total Debt / Shareholders' Equity
+Interest Coverage = EBIT / Interest Expense</div>
+      <p>High leverage magnifies returns <em>and</em> risk. Low interest coverage (e.g., below ~2×) means earnings barely cover interest — a danger sign.</p>
+
+      <h4>Profitability — how good is the business?</h4>
+      <div class="formula">Gross Margin = Gross Profit / Revenue
+Operating Margin = Operating Income / Revenue
+Net Margin = Net Income / Revenue
+ROE = Net Income / Shareholders' Equity
+ROA = Net Income / Total Assets</div>
+      <p><span class="term">ROE</span> (return on equity) and <span class="term">ROA</span> (return on assets) show how efficiently the company turns capital into profit.</p>
+
+      <h4>Efficiency</h4>
+      <div class="formula">Inventory Turnover = COGS / Avg Inventory
+Days Sales Outstanding = (Receivables / Revenue) × 365</div>
+
+      <h4>Valuation — what's it worth?</h4>
+      <div class="formula">P/E = Price per Share / EPS
+EV/EBITDA = Enterprise Value / EBITDA</div>
+
+      <div class="key"><strong>The director's habit:</strong> Don't read a ratio in isolation. Compare it (1) to prior periods (the <em>trend</em>) and (2) to peers/industry (the <em>benchmark</em>). A number only means something in context.</div>
+    `,
+    quiz:[
+      {q:"The current ratio measures a company's:",
+       opts:["Long-term profitability","Ability to cover short-term obligations","Stock valuation","Market share"],
+       a:1,e:"Current ratio = current assets / current liabilities — a liquidity measure of short-term bill-paying ability."},
+      {q:"A low interest coverage ratio (EBIT / interest) signals that:",
+       opts:["The company has too much cash","Earnings barely cover interest payments — a solvency risk","Profit margins are excellent","The stock is undervalued"],
+       a:1,e:"Low interest coverage means operating earnings only thinly cover interest expense, a warning of financial stress."},
+      {q:"Return on Equity (ROE) is defined as:",
+       opts:["Revenue / Equity","Net Income / Shareholders' Equity","Debt / Equity","Price / Earnings"],
+       a:1,e:"ROE = Net Income / Shareholders' Equity, measuring how efficiently the company generates profit from owners' capital."},
+      {q:"The EV/EBITDA multiple is primarily a ___ ratio.",
+       opts:["liquidity","leverage","valuation","efficiency"],
+       a:2,e:"EV/EBITDA is a valuation multiple comparing enterprise value to operating earnings, widely used in M&A."},
+      {q:"A director evaluating any single ratio should always:",
+       opts:["Accept it at face value","Compare it to prior trends and to industry peers","Ignore the industry","Use only the current period"],
+       a:1,e:"Ratios are meaningful only in context — judged against the company's own trend and against peer benchmarks."}
+    ]
+  },
+  {
+    id:"audit", section:"fin",
+    title:"The Audit Committee & Financial Integrity",
+    blurb:"Auditors, internal controls, and SOX",
+    lesson:`
+      <h2>The Audit Committee & Financial Integrity</h2>
+      <p>The audit committee is the board's financial conscience. If you have a finance background, you'll likely serve here — and the stakes are high.</p>
+
+      <h4>What the audit committee owns</h4>
+      <ul>
+        <li><span class="term">Oversight of financial reporting</span> — the accuracy and integrity of the financial statements.</li>
+        <li><span class="term">The external auditor relationship</span> — it <em>hires, fires, and sets the pay</em> of the outside audit firm (so the auditor answers to the board, not management).</li>
+        <li><span class="term">Internal controls</span> — overseeing the systems that prevent and detect errors and fraud.</li>
+        <li><span class="term">Internal audit function</span> and the company's risk and compliance reporting.</li>
+        <li><span class="term">Whistleblower channels</span> — procedures for reporting accounting concerns.</li>
+      </ul>
+
+      <h4>Auditor independence</h4>
+      <p>The external auditor must be <em>independent</em> of management to be credible. The audit committee guards this — limiting non-audit (consulting) work the auditor can do for the company, and rotating audit partners.</p>
+
+      <h4>Sarbanes-Oxley (SOX), 2002</h4>
+      <p>Passed after Enron and WorldCom, SOX transformed financial oversight:</p>
+      <ul>
+        <li><span class="term">Independent audit committee</span> required, with at least one <span class="term">financial expert</span>.</li>
+        <li><span class="term">Section 302</span> — the CEO and CFO must personally <em>certify</em> the financial statements.</li>
+        <li><span class="term">Section 404</span> — management (and the auditor) must assess and report on the effectiveness of <span class="term">internal control over financial reporting (ICFR)</span>.</li>
+      </ul>
+
+      <div class="key"><strong>What "financial expert" means for you:</strong> At least one audit-committee member must have real financial-reporting expertise. Even if that's not you, every audit-committee member must be financially literate — able to read and challenge the statements.</div>
+    `,
+    quiz:[
+      {q:"Who hires, fires, and sets the compensation of the external auditor?",
+       opts:["The CEO","The CFO","The audit committee","The shareholders directly"],
+       a:2,e:"By design, the audit committee — not management — controls the external auditor, so the auditor is accountable to the board."},
+      {q:"SOX Section 302 requires that the financial statements be personally certified by the:",
+       opts:["Audit partner","Entire board","CEO and CFO","SEC chair"],
+       a:2,e:"Under Section 302, the CEO and CFO must personally certify the accuracy of the financial statements."},
+      {q:"SOX Section 404 focuses on:",
+       opts:["Executive pay limits","Internal control over financial reporting (ICFR)","Dividend policy","Insider trading windows"],
+       a:1,e:"Section 404 requires assessment and reporting on the effectiveness of internal control over financial reporting."},
+      {q:"Limiting the consulting work an audit firm can do for its audit client protects:",
+       opts:["The firm's profits","Auditor independence","The stock price","Executive bonuses"],
+       a:1,e:"Restricting non-audit work helps keep the auditor independent and objective about the financials it audits."},
+      {q:"SOX requires the audit committee to include at least one:",
+       opts:["Company founder","Designated financial expert","Major customer","Government official"],
+       a:1,e:"At least one audit-committee member must qualify as a financial expert; all members must be financially literate."}
+    ]
+  },
+  {
+    id:"controls", section:"fin",
+    title:"Internal Controls & Financial Red Flags",
+    blurb:"Audit opinions, restatements, and fraud signals",
+    lesson:`
+      <h2>Internal Controls & Financial Red Flags</h2>
+      <p>A director's value often shows up in catching what's <em>wrong</em>. Here's what to watch.</p>
+
+      <h4>Internal controls</h4>
+      <p><span class="term">Internal controls</span> are the processes that safeguard assets and ensure financial accuracy (e.g., requiring two signatures, separating who records cash from who handles it). A <span class="term">material weakness</span> is a control deficiency serious enough that a material misstatement could go undetected — a flag the board must take seriously.</p>
+
+      <h4>The auditor's opinion — learn the four types</h4>
+      <table>
+        <tr><th>Opinion</th><th>Meaning</th></tr>
+        <tr><td>Unqualified ("clean")</td><td>Statements fairly presented — what you want</td></tr>
+        <tr><td>Qualified</td><td>Fair "except for" a specific issue</td></tr>
+        <tr><td>Adverse</td><td>Statements are materially misstated — serious</td></tr>
+        <tr><td>Disclaimer</td><td>Auditor can't form an opinion — serious</td></tr>
+      </table>
+
+      <h4>The going-concern warning</h4>
+      <p>If the auditor expresses <span class="term">substantial doubt about going concern</span>, it means there's real doubt the company can survive the next 12 months. This is a major red flag.</p>
+
+      <h4>The fraud triangle</h4>
+      <p>Fraud tends to require three things together: <span class="term">pressure</span> (e.g., to hit targets), <span class="term">opportunity</span> (weak controls), and <span class="term">rationalization</span>. Directors reduce fraud mainly by removing <em>opportunity</em> through strong controls and oversight.</p>
+
+      <h4>Earnings-management red flags</h4>
+      <ul>
+        <li>Profit rising while operating <em>cash flow</em> stagnates or falls.</li>
+        <li>Receivables or inventory growing much faster than sales.</li>
+        <li>Heavy reliance on <span class="term">non-GAAP</span> "adjusted" numbers that always exclude bad news.</li>
+        <li>Frequent <span class="term">restatements</span> (correcting prior financials) or last-minute, just-meets-estimate results.</li>
+        <li>Revenue recognized aggressively or pulled forward ("channel stuffing").</li>
+      </ul>
+
+      <div class="key"><strong>Your instinct as a director:</strong> When earnings and cash flow diverge, ask why. The gap between reported profit and real cash is where most accounting problems hide.</div>
+    `,
+    quiz:[
+      {q:"A 'clean' set of financial statements receives which audit opinion?",
+       opts:["Adverse","Disclaimer","Unqualified","Qualified"],
+       a:2,e:"An unqualified ('clean') opinion means the auditor found the statements fairly presented — the best outcome."},
+      {q:"A 'going concern' warning from the auditor signals:",
+       opts:["Record profits","Substantial doubt the company can survive ~12 months","A pending dividend increase","Strong internal controls"],
+       a:1,e:"Going-concern doubt means the auditor questions the company's ability to continue operating in the near term — a major red flag."},
+      {q:"A 'material weakness' refers to a deficiency in:",
+       opts:["The stock price","Internal control over financial reporting","Marketing strategy","Board attendance"],
+       a:1,e:"A material weakness is a control deficiency serious enough that a material misstatement could go undetected."},
+      {q:"Which combination is a classic earnings-quality red flag?",
+       opts:["Profit rising while operating cash flow stagnates or falls","Cash and profit both growing together","Conservative revenue recognition","A clean audit opinion"],
+       a:0,e:"When reported profit climbs but operating cash flow doesn't follow, it often signals aggressive or low-quality earnings."},
+      {q:"Directors most effectively reduce fraud risk by attacking which leg of the fraud triangle?",
+       opts:["Pressure","Opportunity (via strong internal controls)","Rationalization","None — fraud is unavoidable"],
+       a:1,e:"Boards can't remove personal pressure or rationalization, but strong controls and oversight remove the OPPORTUNITY to commit fraud."}
+    ]
+  },
+  {
+    id:"capital", section:"fin",
+    title:"Capital Allocation — The Board's Core Job",
+    blurb:"Capex, dividends, buybacks, debt, and ROIC vs WACC",
+    lesson:`
+      <h2>Capital Allocation — The Board's Core Financial Job</h2>
+      <p>If oversight of the CEO is the board's most important <em>people</em> decision, <span class="term">capital allocation</span> is its most important <em>financial</em> one. How a company deploys its cash, over years, is the single biggest driver of shareholder value.</p>
+
+      <h4>The five things a company can do with a dollar</h4>
+      <ul>
+        <li><span class="term">Reinvest in the business</span> — capital expenditures (capex), R&D, working capital.</li>
+        <li><span class="term">Acquire</span> — buy other companies (M&A).</li>
+        <li><span class="term">Pay down debt</span> — reduce leverage and risk.</li>
+        <li><span class="term">Pay dividends</span> — return cash to shareholders directly.</li>
+        <li><span class="term">Buy back stock</span> — repurchase shares, increasing each remaining share's claim on earnings.</li>
+      </ul>
+
+      <h4>The test for every decision: ROIC vs. WACC</h4>
+      <div class="formula">Create value when:  ROIC  >  WACC</div>
+      <ul>
+        <li><span class="term">ROIC</span> — return on invested capital: the return the company earns on the money it puts to work.</li>
+        <li><span class="term">WACC</span> — weighted average cost of capital: the blended cost of the company's debt and equity — essentially its hurdle rate.</li>
+      </ul>
+      <p>If a project or acquisition earns more than the cost of the capital used to fund it (<span class="term">ROIC &gt; WACC</span>), it creates value. If it earns less, it <em>destroys</em> value even if it grows revenue.</p>
+
+      <div class="key"><strong>The trap directors must guard against:</strong> Growth is not the same as value. Empire-building acquisitions and pet projects can grow the company while earning below the cost of capital — destroying value. The board's job is to demand discipline.</div>
+
+      <h4>Dividends vs. buybacks</h4>
+      <ul>
+        <li>Dividends signal stable, ongoing cash return; cutting them is punished by markets.</li>
+        <li>Buybacks are flexible and tax-efficient — but only create value if shares are repurchased <em>below</em> intrinsic value. Buying back overpriced stock destroys value.</li>
+      </ul>
+
+      <div class="key"><strong>The board's role:</strong> Approve the capital-allocation framework, challenge management's assumptions and hurdle rates, and insist that every major use of cash beat the cost of capital.</div>
+    `,
+    quiz:[
+      {q:"A company creates shareholder value when its return on invested capital (ROIC) is:",
+       opts:["Less than its WACC","Equal to zero","Greater than its WACC (cost of capital)","Equal to its revenue growth"],
+       a:2,e:"Value is created only when ROIC exceeds WACC — earning more on capital than that capital costs."},
+      {q:"WACC represents a company's:",
+       opts:["Total revenue","Blended cost of debt and equity (its hurdle rate)","Net profit margin","Dividend per share"],
+       a:1,e:"WACC is the weighted average cost of capital — the blended cost of financing, used as the hurdle rate for investments."},
+      {q:"Which is NOT one of the basic uses of a company's cash?",
+       opts:["Reinvesting in the business","Paying dividends","Buying back shares","Inflating the audit opinion"],
+       a:3,e:"The legitimate uses are reinvest, acquire, pay down debt, pay dividends, and repurchase shares — not manipulating audits."},
+      {q:"A share buyback creates value only when shares are repurchased:",
+       opts:["Above intrinsic value","Below intrinsic value","At any price","Only during a recession"],
+       a:1,e:"Buybacks add value when the company buys its stock below intrinsic value; overpaying for its own shares destroys value."},
+      {q:"The key discipline a board must enforce in capital allocation is recognizing that:",
+       opts:["All growth creates value","Growth and value are the same thing","Growth can destroy value if it earns below the cost of capital","Cash should never be reinvested"],
+       a:2,e:"Growth that earns less than WACC destroys value; boards must demand that capital decisions clear the cost-of-capital hurdle."}
+    ]
+  },
+  {
+    id:"comp", section:"fin",
+    title:"Executive Compensation & Incentives",
+    blurb:"Pay mix, pay-for-performance, say-on-pay, clawbacks",
+    lesson:`
+      <h2>Executive Compensation & Incentives</h2>
+      <p>Pay design is where governance meets finance. Set incentives well and management's interests align with shareholders'; set them poorly and you reward the wrong behavior. This is the <span class="term">compensation committee's</span> domain.</p>
+
+      <h4>The typical pay mix</h4>
+      <ul>
+        <li><span class="term">Base salary</span> — fixed cash.</li>
+        <li><span class="term">Short-term incentive (STI)</span> — annual cash bonus tied to yearly targets.</li>
+        <li><span class="term">Long-term incentive (LTI)</span> — equity that vests over years: stock options, <span class="term">RSUs</span> (restricted stock units), and <span class="term">PSUs</span> (performance share units tied to multi-year goals).</li>
+      </ul>
+      <p>The more senior the executive, the larger the share of pay that should be <em>at risk</em> and tied to long-term performance.</p>
+
+      <div class="key"><strong>The alignment principle:</strong> Good incentive design makes managers think and act like owners — rewarding sustainable, long-term value creation, not short-term stock pops or accounting tricks.</div>
+
+      <h4>Choosing the right metrics</h4>
+      <p>Beware metrics that are easy to game. Tying bonuses purely to EPS or short-term stock price can encourage buybacks-for-optics, underinvestment, or earnings management. Many boards use a balanced mix including <span class="term">ROIC</span>, relative <span class="term">total shareholder return (TSR)</span>, and strategic milestones.</p>
+
+      <h4>Governance guardrails</h4>
+      <ul>
+        <li><span class="term">Say-on-pay</span> — shareholders cast a (usually advisory) vote on executive pay. A high "no" vote is a warning the board must heed.</li>
+        <li><span class="term">Clawbacks</span> — the right to recover paid bonuses if results are later restated or misconduct is found (now mandated for listed firms).</li>
+        <li><span class="term">Stock ownership guidelines</span> — requiring executives to hold meaningful equity.</li>
+        <li><span class="term">Peer benchmarking</span> — comparing pay to a peer group (used carefully, to avoid a ratchet that inflates pay over time).</li>
+      </ul>
+
+      <div class="key"><strong>The director's question:</strong> "What behavior does this pay plan actually reward — and is that the behavior we want over the next five years?"</div>
+    `,
+    quiz:[
+      {q:"The primary goal of well-designed executive compensation is to:",
+       opts:["Minimize total pay","Align management's incentives with long-term shareholder value","Maximize the annual bonus","Match competitor salaries exactly"],
+       a:1,e:"Good pay design aligns executives with shareholders, rewarding sustainable long-term value creation."},
+      {q:"'PSUs' (performance share units) differ from ordinary RSUs because they:",
+       opts:["Are paid only in cash","Vest based on achieving multi-year performance goals","Have no vesting period","Are given to all employees"],
+       a:1,e:"PSUs vest based on hitting performance targets over time, strengthening pay-for-performance linkage."},
+      {q:"A 'say-on-pay' vote is:",
+       opts:["A binding cap on salaries","A shareholder vote (usually advisory) on executive compensation","A tax on bonuses","A board-only decision"],
+       a:1,e:"Say-on-pay lets shareholders vote on executive pay; though often advisory, a strong 'no' vote pressures the board to respond."},
+      {q:"A 'clawback' provision allows the company to:",
+       opts:["Increase bonuses retroactively","Recover paid compensation after a restatement or misconduct","Avoid paying taxes","Issue more stock options"],
+       a:1,e:"Clawbacks let the company recoup incentive pay if financials are restated or misconduct surfaces — now required for listed firms."},
+      {q:"Tying bonuses solely to short-term EPS or stock price risks encouraging:",
+       opts:["Long-term investment","Earnings management and underinvestment","Stronger internal controls","Higher dividends only"],
+       a:1,e:"Narrow short-term metrics can incentivize gaming the numbers and skimping on long-term investment — a key board concern."}
+    ]
+  },
+  {
+    id:"valuation", section:"fin",
+    title:"Valuation, M&A & Raising Capital",
+    blurb:"DCF, multiples, fairness opinions, and the board in deals",
+    lesson:`
+      <h2>Valuation, M&A & Raising Capital</h2>
+      <p>Few decisions test a board like a major acquisition or a capital raise. You need enough valuation fluency to challenge the bankers — not to build the model yourself, but to know whether the price makes sense.</p>
+
+      <h4>Three ways to value a business</h4>
+      <ul>
+        <li><span class="term">Discounted Cash Flow (DCF)</span> — project the company's future free cash flows and discount them to today at the cost of capital (WACC). Intrinsic value, but highly sensitive to assumptions.</li>
+        <li><span class="term">Comparable companies ("comps")</span> — value relative to similar public companies using multiples like EV/EBITDA and P/E.</li>
+        <li><span class="term">Precedent transactions</span> — what acquirers paid for similar companies in past deals (usually includes a control premium).</li>
+      </ul>
+
+      <div class="key"><strong>DCF in one line:</strong> A company is worth the present value of the cash it will generate in the future. Garbage assumptions in → garbage value out — so directors must probe the growth and discount-rate assumptions.</div>
+
+      <h4>In an acquisition</h4>
+      <ul>
+        <li><span class="term">Control premium</span> — acquirers typically pay above market price to gain control.</li>
+        <li><span class="term">Synergies</span> — cost savings or revenue gains used to justify the premium. Directors should discount management's synergy claims; they're routinely overestimated.</li>
+        <li><span class="term">Fairness opinion</span> — an independent investment bank's written opinion that the price is fair to shareholders. Useful, but not a substitute for the board's own judgment.</li>
+      </ul>
+
+      <div class="key"><strong>When selling control, duties sharpen:</strong> In a sale-of-the-company scenario (the <em>Revlon</em> setting), the board's duty shifts toward getting the best price reasonably available for shareholders.</div>
+
+      <h4>Raising capital — debt vs. equity</h4>
+      <ul>
+        <li><span class="term">Debt</span> — no ownership given up, interest is tax-deductible, but adds fixed obligations and risk.</li>
+        <li><span class="term">Equity</span> — no repayment obligation, but <span class="term">dilutes</span> existing shareholders' ownership.</li>
+      </ul>
+
+      <div class="key"><strong>The director's deal questions:</strong> What's the price vs. intrinsic value? How realistic are the synergies? How is it financed and how dilutive? What if the optimistic case doesn't happen?</div>
+    `,
+    quiz:[
+      {q:"A discounted cash flow (DCF) values a company based on:",
+       opts:["Its current stock price only","The present value of its expected future cash flows","Its total assets at book value","The CEO's reputation"],
+       a:1,e:"DCF discounts projected future free cash flows to today using the cost of capital — an intrinsic value approach."},
+      {q:"A 'fairness opinion' is:",
+       opts:["A shareholder vote","An independent bank's written opinion that a deal price is fair to shareholders","A tax ruling","The auditor's report"],
+       a:1,e:"A fairness opinion from an independent advisor supports (but does not replace) the board's own judgment on a deal's price."},
+      {q:"Directors should treat management's projected M&A 'synergies' with:",
+       opts:["Full acceptance","Healthy skepticism, as they are routinely overestimated","Total indifference","Automatic rejection of the deal"],
+       a:1,e:"Synergy estimates are frequently too optimistic; prudent boards discount them and stress-test the deal economics."},
+      {q:"Raising capital through new equity primarily has the downside of:",
+       opts:["Mandatory repayment","Diluting existing shareholders' ownership","Higher interest expense","Triggering bankruptcy"],
+       a:1,e:"Equity issuance dilutes current owners' percentage stake, unlike debt which must be repaid but doesn't dilute ownership."},
+      {q:"In a sale of control (the 'Revlon' situation), the board's duty shifts toward:",
+       opts:["Keeping management in place","Obtaining the best price reasonably available for shareholders","Avoiding any sale","Maximizing the control premium for executives"],
+       a:1,e:"When a sale of control is inevitable, the board must focus on securing the best price reasonably available for shareholders."}
+    ]
+  },
+  {
+    id:"risk", section:"fin",
+    title:"Risk, Solvency & Financial Distress",
+    blurb:"ERM, covenants, leverage, and the zone of insolvency",
+    lesson:`
+      <h2>Risk, Solvency & Financial Distress</h2>
+      <p>The board's job is not to eliminate risk — businesses are paid to take risk — but to ensure risk is <em>understood, sized, and survivable</em>.</p>
+
+      <h4>Enterprise Risk Management (ERM)</h4>
+      <p><span class="term">ERM</span> is a structured, company-wide approach to identifying and managing the risks that could threaten the strategy: financial, operational, cyber, legal, reputational, and strategic. The board (often a risk or audit committee) oversees that a real ERM process exists and that the biggest risks reach the boardroom.</p>
+
+      <h4>Financial risk specifics</h4>
+      <ul>
+        <li><span class="term">Liquidity risk</span> — running out of cash to meet obligations even while "profitable." Watch the cash runway.</li>
+        <li><span class="term">Solvency risk</span> — liabilities exceeding the ability to pay over the longer term.</li>
+        <li><span class="term">Leverage limits</span> — too much debt magnifies losses and reduces flexibility in a downturn.</li>
+      </ul>
+
+      <h4>Debt covenants</h4>
+      <p><span class="term">Covenants</span> are conditions in loan agreements (e.g., "keep debt/EBITDA below 3.5×" or "maintain minimum interest coverage"). Breaching a covenant can let lenders demand immediate repayment — a fast path to crisis. Directors should know the company's key covenants and how much <span class="term">headroom</span> remains.</p>
+
+      <h4>Stress testing</h4>
+      <p>Good boards ask management to model adverse scenarios: a recession, a lost major customer, a credit-market freeze. <em>"What breaks us, and how much cushion do we have?"</em>
+
+      <div class="key"><strong>A critical legal shift — the zone of insolvency:</strong> When a company is solvent, directors' duties run to <em>shareholders</em>. As it approaches or enters insolvency, the practical beneficiaries of those duties expand to include <em>creditors</em>, because creditors now bear the residual risk. Directors near distress must be especially careful and well-advised.</div>
+
+      <h4>Practical distress signals</h4>
+      <ul>
+        <li>Shrinking cash and tightening liquidity.</li>
+        <li>Covenant headroom evaporating.</li>
+        <li>Rising leverage with falling interest coverage.</li>
+        <li>Difficulty refinancing maturing debt.</li>
+      </ul>
+    `,
+    quiz:[
+      {q:"The board's proper goal regarding risk is to:",
+       opts:["Eliminate all risk","Ensure risks are understood, sized, and survivable","Ignore risk and focus on growth","Delegate risk entirely to auditors"],
+       a:1,e:"Businesses must take risk; the board ensures risks are identified, appropriately sized, and survivable — not eliminated."},
+      {q:"Breaching a debt covenant can result in:",
+       opts:["A higher credit rating","Lenders demanding immediate repayment","Lower interest rates","More equity dilution"],
+       a:1,e:"A covenant breach can trigger default provisions, letting lenders accelerate the debt — a serious liquidity threat."},
+      {q:"'Liquidity risk' refers to the danger of:",
+       opts:["Owning too much cash","Running out of cash to meet obligations even while profitable","Paying too many dividends","Excessive equity"],
+       a:1,e:"Liquidity risk is the inability to meet near-term cash obligations — a profitable company can still fail this way."},
+      {q:"As a company enters the 'zone of insolvency,' directors' duties practically expand to consider:",
+       opts:["Only the CEO","Creditors, who now bear the residual risk","Competitors","The auditors"],
+       a:1,e:"Near insolvency, creditors become the residual risk-bearers, so directors must weigh their interests, not just shareholders'."},
+      {q:"'Stress testing' the company means:",
+       opts:["Auditing past results","Modeling adverse scenarios to see what cushion exists","Increasing executive pay","Reducing the board size"],
+       a:1,e:"Stress testing models downturns and shocks to reveal how much financial cushion the company has before it 'breaks.'"}
+    ]
+  }
+];
+
+/* ============================================================
+   STATE & STORAGE
+   ============================================================ */
+const STORE_KEY = "boardDirProgress_v1";
+let progress = loadProgress();
+let current = { modIndex:0, qIndex:0, score:0, answered:false };
+
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(progress)); }catch(e){}
+}
+
+function show(view){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById(view).classList.add("active");
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+/* ============================================================
+   HOME
+   ============================================================ */
+function renderHome(){
+  const list = document.getElementById("moduleList");
+  list.innerHTML = "";
+  let doneCount = 0;
+  let lastSection = null;
+
+  MODULES.forEach((m,i)=>{
+    if(m.section !== lastSection){
+      const h = document.createElement("div");
+      h.className = "section-head";
+      h.textContent = m.section === "gov" ? "Governance foundations" : "Finance deep dive";
+      list.appendChild(h);
+      const grp = document.createElement("div");
+      grp.className = "modules";
+      grp.dataset.group = m.section;
+      list.appendChild(grp);
+      lastSection = m.section;
+    }
+    const grp = list.querySelector('.modules[data-group="'+m.section+'"]');
+    const p = progress[m.id];
+    const done = p && p.best != null;
+    if(done) doneCount++;
+    const card = document.createElement("div");
+    card.className = "card" + (done ? " done" : "");
+    card.innerHTML = `
+      <div class="num">${done ? "✓" : (i+1)}</div>
+      <div class="meta">
+        <h3>${m.title}${m.section==="fin" ? '<span class="tag-finance">Finance</span>' : ''}</h3>
+        <p>${m.blurb}</p>
+        ${done ? `<span class="score-pill">Best: ${p.best}/${m.quiz.length}</span>` : ""}
+      </div>
+      <div class="chev">›</div>`;
+    card.addEventListener("click",()=>openLesson(i));
+    grp.appendChild(card);
+  });
+
+  const pct = Math.round(doneCount/MODULES.length*100);
+  document.getElementById("overallBar").style.width = pct + "%";
+  document.getElementById("overallLabel").textContent =
+    `${doneCount} of ${MODULES.length} lessons completed`;
+}
+
+/* ============================================================
+   LESSON
+   ============================================================ */
+function openLesson(i){
+  current.modIndex = i;
+  const m = MODULES[i];
+  document.getElementById("lessonCrumb").textContent = `Lesson ${i+1} of ${MODULES.length}`;
+  document.getElementById("lessonBody").innerHTML = m.lesson;
+  show("lesson");
+}
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+function startQuiz(){
+  current.qIndex = 0; current.score = 0; current.answered = false;
+  show("quiz"); renderQuestion();
+}
+function renderQuestion(){
+  const m = MODULES[current.modIndex];
+  const q = m.quiz[current.qIndex];
+  current.answered = false;
+  document.getElementById("quizCrumb").textContent = m.title;
+  document.getElementById("qCount").textContent = `Question ${current.qIndex+1} of ${m.quiz.length}`;
+  document.getElementById("qProg").style.width = (current.qIndex/m.quiz.length*100) + "%";
+  document.getElementById("qText").textContent = q.q;
+  const letters = ["A","B","C","D","E"];
+  const opts = document.getElementById("qOptions");
+  opts.innerHTML = "";
+  q.opts.forEach((text,idx)=>{
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="letter">${letters[idx]}</span><span>${text}</span>`;
+    b.addEventListener("click",()=>selectAnswer(idx));
+    opts.appendChild(b);
+  });
+  const ex = document.getElementById("qExplain");
+  ex.className = "explain"; ex.innerHTML = "";
+  document.getElementById("nextBtn").className = "next";
+}
+function selectAnswer(idx){
+  if(current.answered) return;
+  current.answered = true;
+  const m = MODULES[current.modIndex];
+  const q = m.quiz[current.qIndex];
+  document.querySelectorAll("#qOptions .opt").forEach((b,i)=>{
+    b.disabled = true;
+    if(i===q.a) b.classList.add("correct");
+    if(i===idx && idx!==q.a) b.classList.add("wrong");
+  });
+  const correct = idx===q.a;
+  if(correct) current.score++;
+  const ex = document.getElementById("qExplain");
+  ex.className = "explain show";
+  ex.innerHTML = `<div class="verdict ${correct?"ok":"no"}">${correct?"✓ Correct":"✗ Not quite"}</div><p>${q.e}</p>`;
+  const next = document.getElementById("nextBtn");
+  next.className = "next show";
+  next.textContent = (current.qIndex < m.quiz.length-1) ? "Next ›" : "See results ›";
+}
+function nextQuestion(){
+  const m = MODULES[current.modIndex];
+  if(current.qIndex < m.quiz.length-1){
+    current.qIndex++; renderQuestion(); window.scrollTo({top:0,behavior:"instant"});
+  } else { finishQuiz(); }
+}
+
+/* ============================================================
+   RESULTS
+   ============================================================ */
+function finishQuiz(){
+  const m = MODULES[current.modIndex];
+  const total = m.quiz.length, score = current.score;
+  const pct = Math.round(score/total*100);
+  const prev = progress[m.id] && progress[m.id].best != null ? progress[m.id].best : -1;
+  if(score > prev){ progress[m.id] = { best: score, total }; saveProgress(); }
+  const ring = document.getElementById("resultRing");
+  ring.style.setProperty("--pct", pct + "%");
+  document.getElementById("resultPct").textContent = pct + "%";
+  document.getElementById("resultFrac").textContent = `${score} / ${total}`;
+  let title, msg;
+  if(pct===100){ title="Boardroom-ready! 🎯"; msg="Perfect score. You've mastered this topic — on to the next."; }
+  else if(pct>=80){ title="Strong director instincts 👏"; msg="Solid command of the material. Review any misses and you're set."; }
+  else if(pct>=60){ title="Good foundation 👍"; msg="You've got the basics. Revisit the lesson to lock in the details, then retry."; }
+  else { title="Keep building 💪"; msg="This is the material that separates effective directors. Re-read and try again — it compounds."; }
+  document.getElementById("resultTitle").textContent = title;
+  document.getElementById("resultMsg").textContent = msg;
+  show("results");
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+document.querySelectorAll("[data-go]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const dest = btn.getAttribute("data-go");
+    if(dest==="home"){ renderHome(); show("home"); }
+    else if(dest==="lesson"){ openLesson(current.modIndex); }
+  });
+});
+document.getElementById("startQuizBtn").addEventListener("click",startQuiz);
+document.getElementById("nextBtn").addEventListener("click",nextQuestion);
+document.getElementById("retryBtn").addEventListener("click",startQuiz);
+document.getElementById("reviewBtn").addEventListener("click",()=>openLesson(current.modIndex));
+document.getElementById("homeBtn").addEventListener("click",()=>{
+  if(current.modIndex < MODULES.length-1){ openLesson(current.modIndex+1); }
+  else { renderHome(); show("home"); }
+});
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(confirm("Reset all quiz progress and scores?")){ progress = {}; saveProgress(); renderHome(); }
+});
+
+/* INIT */
+renderHome();
+
+/* Service worker — offline support */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+  navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
+}
+</script>
+</body>
+</html>
