@@ -152,6 +152,19 @@
 
   footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:40px;line-height:1.5}
   .reset{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.78rem;margin-top:8px}
+
+  /* Glossary */
+  .glossary-btn{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    border-radius:999px;padding:9px 18px;font-size:.88rem;cursor:pointer}
+  .glossary-btn:active{background:var(--panel-2)}
+  .gloss-search{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink);font-size:1rem;margin-bottom:6px}
+  .gloss-search:focus{outline:none;border-color:var(--accent)}
+  .gloss-count{font-size:.78rem;color:var(--muted);margin:2px 2px 14px}
+  .gloss-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin-bottom:10px}
+  .gloss-item h4{margin:0 0 4px;color:#9ff0c8;font-size:1rem}
+  .gloss-item p{margin:0;color:#d6e2db;font-size:.9rem}
+  .gloss-empty{color:var(--muted);text-align:center;padding:24px}
 </style>
 </head>
 <body>
@@ -166,7 +179,8 @@
     </header>
 
     <div class="progress-bar"><div id="overallBar"></div></div>
-    <div class="progress-label" id="overallLabel">0 of 16 lessons completed</div>
+    <div class="progress-label" id="overallLabel">0 of 17 lessons completed</div>
+    <div style="text-align:center;margin-top:4px"><button class="glossary-btn" id="glossaryBtn">📖 Finance Glossary</button></div>
 
     <div id="moduleList"></div>
 
@@ -213,6 +227,17 @@
         <button class="primary" id="homeBtn">Next lesson ›</button>
       </div>
     </div>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div id="glossary" class="view">
+    <div class="topbar">
+      <button class="back" data-go="home">‹ All lessons</button>
+      <span class="crumb">Finance Glossary</span>
+    </div>
+    <input id="glossarySearch" class="gloss-search" type="search" placeholder="Search terms or definitions…" autocomplete="off" autocapitalize="off">
+    <div class="gloss-count" id="glossCount"></div>
+    <div id="glossaryList"></div>
   </div>
 
 </div>
@@ -1026,8 +1051,166 @@ PV = FV / (1 + r)ⁿ</div>
        opts:["Dividends are legally guaranteed","Stable dividends are expected, so a cut signals trouble","Cuts raise the tax bill","Cuts dilute shareholders"],
        a:1,e:"Investors treat dividends as a stable commitment, so a cut signals financial weakness and is punished — a key signaling effect."}
     ]
+  },
+
+  /* ---------- CAPSTONE ---------- */
+  {
+    id:"capstone", section:"cap",
+    title:"Worked Case: Investment → Financing",
+    blurb:"One project, start to finish — with real numbers",
+    lesson:`
+      <h2>Worked Case: From Investment to Financing</h2>
+      <p>Let's put it all together. Every big project a board approves raises two linked questions: <em>(1) Is it worth doing?</em> — the investment decision — and <em>(2) how do we pay for it?</em> — the financing decision. Here's a worked example.</p>
+
+      <div class="key"><strong>The setup — "Northwind Manufacturing" weighs a new production line:</strong></div>
+      <table>
+        <tr><th>Item</th><th>Figure</th></tr>
+        <tr><td>Upfront cost (Year 0)</td><td>$10.0M</td></tr>
+        <tr><td>Extra free cash flow</td><td>$3.0M per year, for 5 years</td></tr>
+        <tr><td>Hurdle rate (WACC)</td><td>10%</td></tr>
+        <tr><td>Tax rate</td><td>20%</td></tr>
+      </table>
+
+      <h4>Step 1 — Investment decision: compute NPV</h4>
+      <p>Discount each year's $3.0M back to today at 10%, then subtract the $10.0M outlay.</p>
+      <table>
+        <tr><th>Year</th><th>Cash flow</th><th>Present value @10%</th></tr>
+        <tr><td>1</td><td>$3.00M</td><td>$2.73M</td></tr>
+        <tr><td>2</td><td>$3.00M</td><td>$2.48M</td></tr>
+        <tr><td>3</td><td>$3.00M</td><td>$2.25M</td></tr>
+        <tr><td>4</td><td>$3.00M</td><td>$2.05M</td></tr>
+        <tr><td>5</td><td>$3.00M</td><td>$1.86M</td></tr>
+      </table>
+      <div class="formula">PV of cash flows  ≈  $11.37M
+NPV = $11.37M − $10.0M = +$1.37M</div>
+      <div class="key"><strong>Decision:</strong> NPV is positive (+$1.37M), so the project <em>creates value</em> — accept it. Two cross-checks agree: the <span class="term">IRR</span> is about 15% (above the 10% hurdle ✓), and simple <span class="term">payback</span> is ~3.3 years. When measures ever conflict, NPV is the tie-breaker.</div>
+
+      <h4>Step 2 — Financing decision: how to fund the $10M</h4>
+      <p>Northwind funds to a target mix of <span class="term">50% debt / 50% equity</span>:</p>
+      <ul>
+        <li><span class="term">Debt</span> — borrow at 5% interest. Interest is tax-deductible, so with a 20% <span class="term">tax shield</span> the after-tax cost is 5% × (1 − 0.20) = <strong>4%</strong>.</li>
+        <li><span class="term">Equity</span> — shareholders require <strong>16%</strong>.</li>
+      </ul>
+      <div class="formula">WACC = (50% × 4%) + (50% × 16%)
+     = 2% + 8% = 10%</div>
+      <p>That 10% is exactly the hurdle rate we discounted at in Step 1 — <em>the financing mix is already baked into the WACC.</em></p>
+
+      <div class="key"><strong>The most common mistake — don't double-count:</strong> Do <em>not</em> subtract the loan's interest from the project's cash flows <em>and</em> discount at WACC. Interest is already captured inside the WACC. Discount the project's operating (unlevered) cash flows at WACC — full stop.</div>
+
+      <h4>Step 3 — the trade-off the board weighs</h4>
+      <p>Using debt lowered the cost of capital (the tax shield makes debt cheap) and avoided diluting shareholders — but it added fixed interest payments and bankruptcy risk. So the board asks: <em>is this much leverage prudent given how stable the project's cash flows are, and does it keep us safely inside our debt covenants?</em></p>
+
+      <div class="key"><strong>Synthesis:</strong> A good board keeps the two questions separate but sees the link — accept the project because NPV &gt; 0 at the WACC, then choose a financing mix that keeps the WACC low <em>without</em> taking on dangerous leverage. Value comes from doing positive-NPV projects and funding them sensibly.</div>
+    `,
+    quiz:[
+      {q:"Northwind's project has an NPV of about +$1.37M. The board should:",
+       opts:["Reject it — NPV is positive","Accept it — a positive NPV means it creates value","Wait for the payback to reach zero","Accept only if IRR is below 10%"],
+       a:1,e:"A positive NPV means the discounted cash flows exceed the cost — the project adds value, so accept it."},
+      {q:"With a 50/50 mix, after-tax debt cost of 4%, and equity cost of 16%, the WACC is:",
+       opts:["8%","10%","12%","20%"],
+       a:1,e:"WACC = 0.5×4% + 0.5×16% = 2% + 8% = 10% — the same rate used to discount the project."},
+      {q:"The 5% loan has an after-tax cost of only 4% because:",
+       opts:["The bank gave a discount","Interest is tax-deductible, creating a tax shield","Equity is cheaper than debt","The principal is repaid early"],
+       a:1,e:"Interest is tax-deductible; at a 20% tax rate the after-tax cost is 5% × (1−0.20) = 4% — the debt tax shield."},
+      {q:"Subtracting the loan's interest from the project's cash flows AND discounting at WACC would:",
+       opts:["Be the correct method","Double-count the cost of debt","Increase the NPV correctly","Eliminate the tax shield"],
+       a:1,e:"Interest is already inside the WACC, so also subtracting it from cash flows double-counts financing cost — a classic error."},
+      {q:"The project's IRR of ~15% exceeds the 10% hurdle rate, which:",
+       opts:["Contradicts the NPV result","Confirms the decision to accept","Means the project loses money","Is irrelevant to the decision"],
+       a:1,e:"An IRR above the hurdle rate signals acceptance, consistent with the positive NPV — the measures agree here."}
+    ]
   }
 ];
+
+/* ============================================================
+   GLOSSARY  —  quick-reference finance & governance terms
+   ============================================================ */
+const GLOSSARY = [
+  {t:"NPV (Net Present Value)", d:"The value of a project's future cash flows discounted to today, minus the upfront cost. Accept if NPV > 0. The gold-standard investment rule."},
+  {t:"IRR (Internal Rate of Return)", d:"The discount rate at which a project's NPV equals zero — its own effective rate of return. Accept if IRR exceeds the cost of capital."},
+  {t:"Payback period", d:"How long until cumulative cash flows recover the initial investment. Simple, but ignores the time value of money and cash flows after payback."},
+  {t:"Profitability Index (PI)", d:"Present value of cash flows divided by the initial investment. PI > 1 means accept; useful when capital is limited."},
+  {t:"WACC (Weighted Average Cost of Capital)", d:"The blended after-tax cost of a company's debt and equity. Used as the discount rate and the hurdle rate for investments."},
+  {t:"ROIC (Return on Invested Capital)", d:"The return a company earns on the capital it puts to work. Value is created when ROIC exceeds WACC."},
+  {t:"Cost of capital", d:"The return investors require to provide funding, given the risk. For the whole firm this is the WACC."},
+  {t:"Time value of money", d:"The principle that a dollar today is worth more than a dollar tomorrow, because it can be invested (and inflation erodes future dollars)."},
+  {t:"Present value (PV)", d:"What a future cash amount is worth today, found by discounting it at a rate r."},
+  {t:"Future value (FV)", d:"What an amount today grows to in the future by compounding at a rate r."},
+  {t:"Discount rate", d:"The rate used to convert future cash flows to present value; reflects risk and time, often the WACC."},
+  {t:"Annuity", d:"A stream of equal cash flows for a fixed number of periods (e.g., a level loan payment)."},
+  {t:"Perpetuity", d:"A stream of cash flows that continues forever; its present value is the cash flow divided by the discount rate (CF ÷ r)."},
+  {t:"Capital budgeting", d:"The process of evaluating and choosing long-term investments/projects, mainly via NPV and IRR. The 'investment decision.'"},
+  {t:"Capital structure", d:"The mix of debt and equity a company uses to finance itself. The 'financing decision.'"},
+  {t:"Capital allocation", d:"How a company deploys its cash: reinvest, acquire, pay down debt, pay dividends, or buy back stock. A board's core financial job."},
+  {t:"Financial leverage", d:"The use of debt in the capital structure. It amplifies both gains and losses and raises financial risk."},
+  {t:"Tax shield", d:"The tax saving from deducting interest expense, which lowers the after-tax cost of debt and makes modest leverage attractive."},
+  {t:"Debt financing", d:"Raising money by borrowing (loans/bonds). Must be repaid with interest; doesn't dilute owners; interest is tax-deductible."},
+  {t:"Equity financing", d:"Raising money by selling ownership (shares). No repayment obligation, but dilutes existing shareholders."},
+  {t:"Dilution", d:"The reduction in existing shareholders' ownership percentage when new shares are issued."},
+  {t:"Modigliani–Miller (M&M)", d:"Theory showing that in a frictionless world (no taxes/bankruptcy costs) capital structure wouldn't affect firm value. A baseline, not reality."},
+  {t:"Trade-off theory", d:"In the real world, the optimal capital structure balances debt's tax benefits against the rising costs of financial distress."},
+  {t:"Pecking-order theory", d:"Managers prefer internal funds first, then debt, and issuing new equity last (since equity issues can signal overvaluation)."},
+  {t:"Working capital", d:"Current assets minus current liabilities — the money funding day-to-day operations."},
+  {t:"Cash conversion cycle (CCC)", d:"Days cash is tied up between paying for inputs and collecting from sales: DSO + DIO − DPO. Shorter is better."},
+  {t:"DSO / DIO / DPO", d:"Days Sales Outstanding (time to collect receivables), Days Inventory Outstanding (time stock is held), Days Payable Outstanding (time taken to pay suppliers)."},
+  {t:"Dividend", d:"A cash distribution of profits to shareholders. Markets expect stability, so a cut is heavily punished."},
+  {t:"Share buyback", d:"A company repurchasing its own shares. Flexible and tax-efficient, but only adds value if bought below intrinsic value."},
+  {t:"Sunk cost", d:"Money already spent and unrecoverable. It should be ignored in decisions — only future incremental cash flows matter."},
+  {t:"Opportunity cost", d:"The value of the next-best alternative forgone when a resource is used one way rather than another."},
+  {t:"Free cash flow", d:"Cash a business generates after operating expenses and capital investment — the cash available to investors."},
+  {t:"EBITDA", d:"Earnings before interest, taxes, depreciation & amortization — a rough proxy for operating cash generation."},
+  {t:"EBIT", d:"Earnings before interest and taxes; operating income. Used in interest-coverage and other ratios."},
+  {t:"Gross / operating / net margin", d:"Profitability ratios: gross profit, operating income, and net income each as a percentage of revenue."},
+  {t:"ROE / ROA", d:"Return on Equity (net income ÷ equity) and Return on Assets (net income ÷ assets) — how efficiently capital becomes profit."},
+  {t:"Current ratio / Quick ratio", d:"Liquidity measures of ability to cover short-term obligations; the quick ratio excludes inventory."},
+  {t:"Debt-to-equity", d:"Total debt divided by shareholders' equity — a leverage measure."},
+  {t:"Interest coverage", d:"EBIT ÷ interest expense — how comfortably earnings cover interest. Low coverage signals distress risk."},
+  {t:"P/E ratio", d:"Share price divided by earnings per share — a common valuation multiple."},
+  {t:"EV/EBITDA", d:"Enterprise value divided by EBITDA — a capital-structure-neutral valuation multiple widely used in M&A."},
+  {t:"Enterprise value (EV)", d:"The total value of a business to all investors: equity market value plus net debt."},
+  {t:"DCF (Discounted Cash Flow)", d:"A valuation that discounts projected future free cash flows to present value at the cost of capital."},
+  {t:"Comparable companies ('comps')", d:"Valuing a company using the trading multiples of similar public companies."},
+  {t:"Precedent transactions", d:"Valuing a company based on prices paid in past acquisitions of similar businesses (usually including a control premium)."},
+  {t:"Control premium", d:"The amount an acquirer pays above market price to gain control of a company."},
+  {t:"Synergies", d:"Cost savings or revenue gains expected from combining two companies. Routinely overestimated — directors should be skeptical."},
+  {t:"Fairness opinion", d:"An independent bank's written opinion that a deal's price is fair to shareholders. Supports, but doesn't replace, the board's judgment."},
+  {t:"Revlon duties", d:"When a sale of control is inevitable, the board's duty shifts to getting the best price reasonably available for shareholders."},
+  {t:"Going concern", d:"An auditor's flag of substantial doubt that a company can survive the next ~12 months — a major red flag."},
+  {t:"Material weakness", d:"A deficiency in internal control over financial reporting serious enough that a material misstatement could go undetected."},
+  {t:"Internal controls (ICFR)", d:"Processes that safeguard assets and ensure accurate financial reporting (e.g., separation of duties, approvals)."},
+  {t:"Sarbanes-Oxley (SOX)", d:"2002 law (post-Enron) strengthening financial oversight: independent audit committees, CEO/CFO certification (§302), and ICFR reporting (§404)."},
+  {t:"Audit committee", d:"The board committee overseeing financial reporting, internal controls, and the external auditor (which it hires and fires)."},
+  {t:"Fiduciary duty", d:"The highest legal duty of good faith and trust owed by directors to the company and its shareholders."},
+  {t:"Duty of care", d:"A director's duty to make decisions on an informed, attentive basis."},
+  {t:"Duty of loyalty", d:"A director's duty to put the company's interests ahead of personal gain (no self-dealing or taking corporate opportunities)."},
+  {t:"Business judgment rule", d:"Courts won't second-guess an informed, good-faith, conflict-free decision even if it turns out badly — protecting directors."},
+  {t:"Caremark duty", d:"Directors' good-faith obligation to put compliance/reporting systems in place and monitor them; conscious failure is a breach."},
+  {t:"D&O insurance", d:"Directors & Officers liability insurance covering defense costs and settlements; 'Side A' protects directors when the company can't indemnify them."},
+  {t:"Indemnification", d:"The company's agreement to reimburse directors for covered legal costs and liabilities incurred in good faith in their role."},
+  {t:"Exculpation", d:"A charter clause that can eliminate director liability for duty-of-care breaches (not loyalty, bad faith, or intentional misconduct)."},
+  {t:"Independent director", d:"A director with no material relationship to the company, able to objectively oversee management."},
+  {t:"Say-on-pay", d:"A shareholder vote (usually advisory) on executive compensation; a strong 'no' pressures the board to respond."},
+  {t:"Clawback", d:"The right to recover incentive pay after a financial restatement or misconduct; now required for listed firms."},
+  {t:"RSU / PSU", d:"Restricted Stock Units (vest over time) and Performance Share Units (vest on hitting multi-year performance goals)."},
+  {t:"Debt covenant", d:"A condition in a loan agreement (e.g., a leverage limit). Breaching it can let lenders demand immediate repayment."},
+  {t:"Zone of insolvency", d:"As a company nears insolvency, directors' duties practically expand to consider creditors, who then bear the residual risk."},
+  {t:"Quorum", d:"The minimum number of members (or shares) that must be present for a meeting's votes to be valid."},
+  {t:"Proxy", d:"An authorization letting someone else vote a shareholder's shares when they can't attend a meeting."}
+];
+
+function renderGlossary(filter){
+  filter = filter || "";
+  const f = filter.trim().toLowerCase();
+  const items = GLOSSARY.slice()
+    .sort((a,b)=>a.t.localeCompare(b.t))
+    .filter(x => !f || x.t.toLowerCase().includes(f) || x.d.toLowerCase().includes(f));
+  const countEl = document.getElementById("glossCount");
+  countEl.textContent = f ? `${items.length} match${items.length===1?"":"es"}` : `${GLOSSARY.length} terms`;
+  const list = document.getElementById("glossaryList");
+  list.innerHTML = items.length
+    ? items.map(x=>`<div class="gloss-item"><h4>${x.t}</h4><p>${x.d}</p></div>`).join("")
+    : `<div class="gloss-empty">No terms match “${filter}”.</div>`;
+}
 
 /* ============================================================
    STATE & STORAGE
@@ -1064,7 +1247,8 @@ function renderHome(){
       h.className = "section-head";
       h.textContent = m.section === "gov" ? "Governance foundations"
                     : m.section === "fin" ? "Finance deep dive"
-                    : "Financial management";
+                    : m.section === "mgmt" ? "Financial management"
+                    : "Putting it all together";
       list.appendChild(h);
       const grp = document.createElement("div");
       grp.className = "modules";
@@ -1081,7 +1265,7 @@ function renderHome(){
     card.innerHTML = `
       <div class="num">${done ? "✓" : (i+1)}</div>
       <div class="meta">
-        <h3>${m.title}${m.section==="fin" ? '<span class="tag-finance">Finance</span>' : m.section==="mgmt" ? '<span class="tag-finance">Fin. mgmt</span>' : ''}</h3>
+        <h3>${m.title}${m.section==="fin" ? '<span class="tag-finance">Finance</span>' : m.section==="mgmt" ? '<span class="tag-finance">Fin. mgmt</span>' : m.section==="cap" ? '<span class="tag-finance">Capstone</span>' : ''}</h3>
         <p>${m.blurb}</p>
         ${done ? `<span class="score-pill">Best: ${p.best}/${m.quiz.length}</span>` : ""}
       </div>
@@ -1206,6 +1390,12 @@ document.getElementById("homeBtn").addEventListener("click",()=>{
 document.getElementById("resetBtn").addEventListener("click",()=>{
   if(confirm("Reset all quiz progress and scores?")){ progress = {}; saveProgress(); renderHome(); }
 });
+document.getElementById("glossaryBtn").addEventListener("click",()=>{
+  document.getElementById("glossarySearch").value = "";
+  renderGlossary();
+  show("glossary");
+});
+document.getElementById("glossarySearch").addEventListener("input",e=>renderGlossary(e.target.value));
 
 /* INIT */
 renderHome();
