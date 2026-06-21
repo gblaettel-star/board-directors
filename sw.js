@@ -1,4 +1,4 @@
-const CACHE = 'boardroom-v1';
+const CACHE = 'boardroom-v2';
 const PAGES = [
   './index.html',
   './manifest.json',

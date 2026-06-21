@@ -166,7 +166,7 @@
     </header>
 
     <div class="progress-bar"><div id="overallBar"></div></div>
-    <div class="progress-label" id="overallLabel">0 of 12 lessons completed</div>
+    <div class="progress-label" id="overallLabel">0 of 16 lessons completed</div>
 
     <div id="moduleList"></div>
 
@@ -831,6 +831,201 @@ EV/EBITDA = Enterprise Value / EBITDA</div>
        opts:["Auditing past results","Modeling adverse scenarios to see what cushion exists","Increasing executive pay","Reducing the board size"],
        a:1,e:"Stress testing models downturns and shocks to reveal how much financial cushion the company has before it 'breaks.'"}
     ]
+  },
+
+  /* ---------- FINANCIAL MANAGEMENT ---------- */
+  {
+    id:"tvm", section:"mgmt",
+    title:"The Time Value of Money",
+    blurb:"Present value, discounting, and the foundation of every decision",
+    lesson:`
+      <h2>The Time Value of Money</h2>
+      <p>Every financial-management decision rests on one idea: <span class="term">a dollar today is worth more than a dollar tomorrow.</span> Today's dollar can be invested to earn a return, and inflation erodes future dollars. This is the <span class="term">time value of money (TVM)</span> — the engine behind valuation, investment, and financing decisions.</p>
+
+      <h4>Future value vs. present value</h4>
+      <ul>
+        <li><span class="term">Future Value (FV)</span> — what money today grows to, by <em>compounding</em> forward at a rate r.</li>
+        <li><span class="term">Present Value (PV)</span> — what a future amount is worth today, by <em>discounting</em> it back.</li>
+      </ul>
+      <div class="formula">FV = PV × (1 + r)ⁿ
+PV = FV / (1 + r)ⁿ</div>
+      <p>Here r is the rate per period and n is the number of periods. Discounting is just compounding run in reverse.</p>
+
+      <h4>The discount rate</h4>
+      <p>The <span class="term">discount rate</span> reflects the return investors require given the risk and the time involved — often the company's cost of capital (<span class="term">WACC</span>). Riskier cash flows are discounted at higher rates, lowering their present value.</p>
+
+      <div class="key"><strong>Why it matters to directors:</strong> When management presents a project or deal, its value is the present value of future cash flows. A small change in the discount rate or growth assumption can swing the answer enormously — so probe those assumptions.</div>
+
+      <h4>Two recurring patterns</h4>
+      <ul>
+        <li><span class="term">Annuity</span> — a stream of equal cash flows for a set number of periods (e.g., a loan payment).</li>
+        <li><span class="term">Perpetuity</span> — a stream that continues forever; its value is simply <em>Cash Flow ÷ r</em>.</li>
+      </ul>
+
+      <div class="key"><strong>One-line takeaway:</strong> Money has a time value, so cash flows in different years can't be compared until they're all discounted to the same point — today.</div>
+    `,
+    quiz:[
+      {q:"The core principle of the time value of money is that:",
+       opts:["A dollar tomorrow is worth more than a dollar today","A dollar today is worth more than a dollar tomorrow","All dollars are always equal in value","Inflation increases future value"],
+       a:1,e:"A dollar today can be invested to earn a return (and inflation erodes future dollars), so it's worth more than a future dollar."},
+      {q:"Converting a future cash flow into its value today is called:",
+       opts:["Compounding","Discounting","Amortizing","Leveraging"],
+       a:1,e:"Discounting brings future amounts back to present value; compounding grows present amounts into the future."},
+      {q:"Holding the cash flow constant, raising the discount rate will make the present value:",
+       opts:["Higher","Lower","Unchanged","Negative"],
+       a:1,e:"A higher discount rate reduces present value — riskier or more-distant cash flows are worth less today."},
+      {q:"A stream of cash flows that continues forever is a:",
+       opts:["Annuity","Perpetuity","Bond","Dividend"],
+       a:1,e:"A perpetuity pays forever; its present value is simply the cash flow divided by the discount rate (CF / r)."},
+      {q:"The discount rate used to value a company's projects is usually based on its:",
+       opts:["Revenue growth rate","Cost of capital (WACC)","Tax rate","Dividend yield"],
+       a:1,e:"The cost of capital (WACC) reflects the return investors require for the risk, and serves as the discount/hurdle rate."}
+    ]
+  },
+  {
+    id:"investment", section:"mgmt",
+    title:"Investment Decisions (Capital Budgeting)",
+    blurb:"NPV, IRR, payback — choosing which projects to fund",
+    lesson:`
+      <h2>Investment Decisions — Capital Budgeting</h2>
+      <p>The <span class="term">investment decision</span> (capital budgeting) asks: <em>which long-term projects or assets should the company put money into?</em> This is one of the three pillars of financial management, and where value is created or destroyed.</p>
+
+      <h4>The gold standard: Net Present Value (NPV)</h4>
+      <p><span class="term">NPV</span> discounts all of a project's future cash flows back to today and subtracts the initial investment.</p>
+      <div class="formula">NPV = Σ [ Cash Flowₜ / (1 + r)ᵗ ] − Initial Investment</div>
+      <div class="key"><strong>The NPV rule:</strong> Accept a project if <em>NPV &gt; 0</em> (it adds value); reject if NPV &lt; 0. Among mutually exclusive projects, choose the highest NPV. NPV is preferred because it measures value created in dollars, using the time value of money.</div>
+
+      <h4>Internal Rate of Return (IRR)</h4>
+      <p><span class="term">IRR</span> is the discount rate at which a project's NPV equals zero — effectively the project's own rate of return. <em>Rule:</em> accept if IRR &gt; the hurdle rate (cost of capital).</p>
+      <p>IRR is intuitive but has traps: it can mislead when comparing projects of different size or timing, and projects with unusual cash-flow patterns can have multiple IRRs. <strong>When IRR and NPV disagree, trust NPV.</strong></p>
+
+      <h4>Payback period</h4>
+      <p><span class="term">Payback</span> = how long until cumulative cash flows recover the initial outlay. Simple and popular for gauging risk/liquidity, but it ignores the time value of money and everything that happens <em>after</em> payback. Use it as a supplement, not the decision-maker.</p>
+
+      <h4>Other measures</h4>
+      <ul>
+        <li><span class="term">Profitability Index (PI)</span> = PV of cash flows ÷ initial investment; PI &gt; 1 means accept. Useful when capital is rationed.</li>
+        <li><span class="term">Sunk costs</span> — money already spent; ignore it. Only future, <em>incremental</em> cash flows matter.</li>
+        <li><span class="term">Opportunity cost</span> — include the value of the next-best forgone use of a resource.</li>
+      </ul>
+
+      <div class="key"><strong>The director's lens:</strong> Ask what discount rate was used, whether the cash-flow forecasts are realistic, whether sunk costs crept in, and whether the project clears the cost-of-capital hurdle. Discipline here is the heart of value creation.</div>
+    `,
+    quiz:[
+      {q:"Under the NPV rule, a company should accept a project when its NPV is:",
+       opts:["Less than zero","Greater than zero","Exactly zero","Equal to the payback period"],
+       a:1,e:"A positive NPV means the project's discounted cash flows exceed its cost — it adds value, so accept it."},
+      {q:"The internal rate of return (IRR) is the discount rate at which:",
+       opts:["Payback equals one year","NPV equals zero","Revenue equals costs","Debt equals equity"],
+       a:1,e:"IRR is the rate that sets NPV to zero — effectively the project's own return; accept when IRR exceeds the cost of capital."},
+      {q:"A major weakness of the payback period method is that it:",
+       opts:["Is too complex to calculate","Ignores the time value of money and cash flows after payback","Always overstates returns","Requires the discount rate"],
+       a:1,e:"Payback ignores the time value of money and everything occurring after the cutoff, so it's a supplement, not the decision rule."},
+      {q:"When NPV and IRR give conflicting rankings for mutually exclusive projects, you should generally rely on:",
+       opts:["IRR","NPV","Payback","Profitability index only"],
+       a:1,e:"NPV measures actual dollar value created and avoids IRR's scale/timing pitfalls, so trust NPV when they conflict."},
+      {q:"In evaluating a new project, money already spent on prior research is a ___ and should be:",
+       opts:["sunk cost; ignored","opportunity cost; added","incremental cash flow; included","financing cost; discounted"],
+       a:0,e:"Sunk costs are unrecoverable past spending; only future incremental cash flows are relevant to the decision."}
+    ]
+  },
+  {
+    id:"financing", section:"mgmt",
+    title:"Financing Decisions & Capital Structure",
+    blurb:"Debt vs. equity, leverage, and the optimal mix",
+    lesson:`
+      <h2>Financing Decisions & Capital Structure</h2>
+      <p>The <span class="term">financing decision</span> asks: <em>how should the company fund its investments — with debt, equity, or a mix?</em> That mix is the company's <span class="term">capital structure</span>, and getting it right lowers the cost of capital and raises firm value.</p>
+
+      <h4>Debt vs. equity — the core trade-off</h4>
+      <table>
+        <tr><th></th><th>Debt</th><th>Equity</th></tr>
+        <tr><td>Cost</td><td>Usually cheaper; interest is tax-deductible</td><td>More expensive; no tax shield</td></tr>
+        <tr><td>Obligation</td><td>Must repay + interest</td><td>No repayment required</td></tr>
+        <tr><td>Control</td><td>No ownership given up</td><td>Dilutes owners</td></tr>
+        <tr><td>Risk</td><td>Adds fixed costs / bankruptcy risk</td><td>Lower financial risk</td></tr>
+      </table>
+
+      <h4>Financial leverage</h4>
+      <p><span class="term">Leverage</span> is the use of debt. Because debt is cheaper and tax-favored, modest leverage can raise returns to shareholders (higher ROE) — but it <em>amplifies</em> losses in bad years and increases the risk of distress. Leverage cuts both ways.</p>
+
+      <div class="key"><strong>The tax shield:</strong> Interest is tax-deductible, so debt creates a <em>tax shield</em> that lowers the after-tax cost of debt. This is the main reason a bit of debt usually lowers a company's overall cost of capital (WACC).</div>
+
+      <h4>Is there an optimal capital structure?</h4>
+      <ul>
+        <li><span class="term">Modigliani–Miller (M&M)</span>, in a perfect world with no taxes or bankruptcy costs, showed capital structure wouldn't affect firm value. It's a baseline, not reality.</li>
+        <li><span class="term">Trade-off theory</span> — in the real world, firms balance the <em>tax benefits</em> of debt against the rising <em>costs of financial distress</em>. The optimal structure minimizes WACC and maximizes value.</li>
+        <li><span class="term">Pecking-order theory</span> — managers prefer internal funds first, then debt, then issuing equity last (because issuing equity can signal the stock is overvalued).</li>
+      </ul>
+
+      <div class="key"><strong>The director's job:</strong> Ensure leverage is prudent — enough to lower the cost of capital and discipline management, but not so much that a downturn threatens solvency or trips debt covenants. Match financing to the stability of the company's cash flows.</div>
+    `,
+    quiz:[
+      {q:"A company's 'capital structure' refers to:",
+       opts:["Its organizational chart","Its mix of debt and equity financing","Its fixed assets","Its board committees"],
+       a:1,e:"Capital structure is the blend of debt and equity used to finance the company's assets and investments."},
+      {q:"A key advantage of debt over equity financing is that:",
+       opts:["It never has to be repaid","Interest is tax-deductible, creating a tax shield","It dilutes ownership","It has no risk"],
+       a:1,e:"Interest is tax-deductible, lowering the after-tax cost of debt — a major reason modest leverage can reduce WACC."},
+      {q:"Financial leverage (using debt) primarily:",
+       opts:["Eliminates risk","Amplifies both gains and losses to shareholders","Always lowers ROE","Removes the need for equity"],
+       a:1,e:"Leverage magnifies returns when times are good and losses when they're bad, while raising financial-distress risk."},
+      {q:"Real-world 'trade-off theory' says the optimal capital structure balances:",
+       opts:["Revenue against expenses","The tax benefits of debt against the costs of financial distress","Dividends against buybacks","Inside against outside directors"],
+       a:1,e:"Trade-off theory weighs debt's tax shield against rising bankruptcy/distress costs to find the value-maximizing mix."},
+      {q:"Under the 'pecking-order theory,' managers prefer to finance with:",
+       opts:["New equity first, then debt, then internal funds","Internal funds first, then debt, then equity last","Only equity","Only short-term debt"],
+       a:1,e:"Pecking order: internal funds first, then debt, and new equity last — since issuing equity can signal overvaluation."}
+    ]
+  },
+  {
+    id:"workingcap", section:"mgmt",
+    title:"Working Capital & Dividend Decisions",
+    blurb:"Managing short-term cash and returning profits",
+    lesson:`
+      <h2>Working Capital & Dividend Decisions</h2>
+      <p>Beyond big investment and financing choices, financial management runs the day-to-day money and decides how to return profits. Two more pillars round out the discipline.</p>
+
+      <h4>Working capital management</h4>
+      <p><span class="term">Working capital = current assets − current liabilities.</span> It funds daily operations: paying suppliers, holding inventory, collecting from customers. Manage it poorly and a profitable company can still run out of cash.</p>
+      <p>The key levers:</p>
+      <ul>
+        <li><span class="term">Receivables (DSO)</span> — collect from customers faster.</li>
+        <li><span class="term">Inventory (DIO)</span> — hold less stock without causing shortages.</li>
+        <li><span class="term">Payables (DPO)</span> — take reasonable time to pay suppliers.</li>
+      </ul>
+      <div class="formula">Cash Conversion Cycle = DSO + DIO − DPO</div>
+      <p>The <span class="term">cash conversion cycle (CCC)</span> measures how long cash is tied up between paying for inputs and collecting from sales. <em>Shorter is better</em> — it frees up cash.</p>
+
+      <div class="key"><strong>The balance:</strong> Too little working capital risks missing payments and stockouts; too much ties up cash that could earn returns elsewhere. The goal is efficiency, not maximization.</div>
+
+      <h4>The dividend decision</h4>
+      <p>Once a company is profitable, how much cash should it <em>return</em> to shareholders versus <em>reinvest?</em> This is the <span class="term">dividend decision</span> (closely tied to capital allocation).</p>
+      <ul>
+        <li><span class="term">Dividends</span> — regular cash payments; markets expect them to be stable, so a <em>cut</em> is punished severely.</li>
+        <li><span class="term">Share buybacks</span> — flexible and tax-efficient, but only create value when shares are repurchased below intrinsic value.</li>
+        <li><span class="term">Reinvestment</span> — best when the company has projects earning above its cost of capital (NPV &gt; 0).</li>
+      </ul>
+
+      <div class="key"><strong>The guiding rule:</strong> Return cash to shareholders when the company <em>cannot</em> reinvest it at a return above its cost of capital. Hoarding cash with no good use, or paying dividends the company can't sustain, both destroy value. <em>Signaling</em> matters too: dividend changes send strong messages about management's confidence.</div>
+    `,
+    quiz:[
+      {q:"Working capital is defined as:",
+       opts:["Total assets − total liabilities","Current assets − current liabilities","Revenue − expenses","Debt − equity"],
+       a:1,e:"Working capital = current assets − current liabilities; it funds day-to-day operations."},
+      {q:"A shorter cash conversion cycle (CCC) is generally:",
+       opts:["Worse — it strains suppliers","Better — it frees up cash tied in operations","Irrelevant to cash","Only relevant to banks"],
+       a:1,e:"A shorter CCC means cash is tied up for less time between paying for inputs and collecting from sales — freeing up cash."},
+      {q:"Which action would SHORTEN the cash conversion cycle?",
+       opts:["Collecting receivables more slowly","Collecting receivables faster (lower DSO)","Holding more inventory","Paying suppliers immediately"],
+       a:1,e:"CCC = DSO + DIO − DPO. Collecting receivables faster lowers DSO and shortens the cycle."},
+      {q:"The guiding principle of the dividend decision is to return cash to shareholders when the company:",
+       opts:["Always, every quarter regardless","Cannot reinvest it above its cost of capital","Has the most debt","Wants to dilute owners"],
+       a:1,e:"If the firm can't reinvest cash in projects earning above its cost of capital, returning it to shareholders creates more value."},
+      {q:"Why do markets react strongly to a dividend CUT?",
+       opts:["Dividends are legally guaranteed","Stable dividends are expected, so a cut signals trouble","Cuts raise the tax bill","Cuts dilute shareholders"],
+       a:1,e:"Investors treat dividends as a stable commitment, so a cut signals financial weakness and is punished — a key signaling effect."}
+    ]
   }
 ];
 
@@ -867,7 +1062,9 @@ function renderHome(){
     if(m.section !== lastSection){
       const h = document.createElement("div");
       h.className = "section-head";
-      h.textContent = m.section === "gov" ? "Governance foundations" : "Finance deep dive";
+      h.textContent = m.section === "gov" ? "Governance foundations"
+                    : m.section === "fin" ? "Finance deep dive"
+                    : "Financial management";
       list.appendChild(h);
       const grp = document.createElement("div");
       grp.className = "modules";
@@ -884,7 +1081,7 @@ function renderHome(){
     card.innerHTML = `
       <div class="num">${done ? "✓" : (i+1)}</div>
       <div class="meta">
-        <h3>${m.title}${m.section==="fin" ? '<span class="tag-finance">Finance</span>' : ''}</h3>
+        <h3>${m.title}${m.section==="fin" ? '<span class="tag-finance">Finance</span>' : m.section==="mgmt" ? '<span class="tag-finance">Fin. mgmt</span>' : ''}</h3>
         <p>${m.blurb}</p>
         ${done ? `<span class="score-pill">Best: ${p.best}/${m.quiz.length}</span>` : ""}
       </div>
